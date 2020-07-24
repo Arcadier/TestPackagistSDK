@@ -1,14 +1,13 @@
 {
-    "name": "arcadier/apisdk",
+    "name": "Arcadier/TestPackagistSDK",
     "description": "API SDK in PHP",
-    "require": {},
+    "require": {
+        "php": "^7.0.0"
+    },
     "repositories": [
         {
             "type": "composer",
-            "url": "https://repo.packagist.com/bryanarcadier/"
-        },
-        {
-            "packagist.org": false
+            "url": "https://github.com/Arcadier/TestPackagistSDK.git"
         }
     ]
 }
