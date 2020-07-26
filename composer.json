@@ -1,5 +1,5 @@
 {
-    "name": "Arcadier/TestPackagistSDK",
+    "name": "arcadier/test-packagist-sdk",
     "description": "API SDK in PHP",
     "require": {
         "php": "^7.0.0"
