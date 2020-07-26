@@ -2,12 +2,6 @@
     "name": "arcadier/test-packagist-sdk",
     "description": "API SDK in PHP",
     "require": {
-        "Arcadier/TestPackagistSDK": "dev-master"
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url":  "https://github.com/Arcadier/TestPackagistSDK.git"
-        }
-    ]
+        "php": "7.0.0"
+    }
 }
