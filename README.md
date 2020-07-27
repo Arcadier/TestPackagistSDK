@@ -15,10 +15,10 @@ The PHP SDK is hosted on [Packagist](https://packagist.org/packages/arcadier/tes
 1. Install a copy of the SDK into your server
 2. Make an API call
 
-<code>
+```
 require_once '../sdk/ApiSdk.php';
 
 $sdk = new ApiSdk();
 
 $response = $sdk->getAllItems("?maxPrice=75&pageSize=1&pageNumber=1");
-</code>
+```
