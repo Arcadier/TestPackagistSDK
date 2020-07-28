@@ -8,17 +8,27 @@ PHP SDK is an API wrapper that allows developers to integrate their PHP applicat
 PHP 7.0.0+
 
 ## Installation
-The PHP SDK is hosted on [Packagist](https://packagist.org/packages/arcadier/test-packagist-sdk). To install it, run this command: <br />
-<code>composer require arcadier/test-packagist-sdk</code>
+
+### Composer
+The PHP SDK is hosted on [Packagist](https://packagist.org/packages/arcadier/test-packagist-sdk). First, install composer if you do not have it. Next, to install the SDK, run this command:
+```
+composer require arcadier/test-packagist-sdk
+```
+
 
 ## 💡 Getting Started
 1. Install a copy of the SDK into your server
-2. Make an API call
+2. Make an API call from a new PHP file
 
 ```
-require_once '../sdk/ApiSdk.php';
+require_once '/sdk/ApiSdk.php';
 
 $sdk = new ApiSdk();
 
 $response = $sdk->getAllItems("?maxPrice=75&pageSize=1&pageNumber=1");
 ```
+##  📚 Docs
+Our [API documentation](https://apiv2.arcadier.com/?version=latest#68a1094c-77b6-45fb-acc2-aec053d94a28) provides further information on what our API can do as well as the type of responses you will receive from using the functions in the SDK.
+
+## ⚗️ Testing
+We provide a test suite to valide the SDK. To start using it, install the SDK-Test Plugin on your admin portal. Create a merchant account and input the merchant id. Click start tests to run the automated test script. The process will take a few seconds to run and will display the test results.
