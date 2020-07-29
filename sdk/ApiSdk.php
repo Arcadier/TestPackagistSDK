@@ -170,6 +170,7 @@ class ApiSdk
         return $userInfo;
     }
 
+    //not working
     public function upgradeUserRole($id, $role)
     {
         if ($this->adminToken == null) {
