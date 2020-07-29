@@ -1,6 +1,5 @@
 <?php
-include '../admin/admintoken.php'; // this is for arcadier marketplace
-include 'admin_token.php'; // this is for external servers
+// include '../admin/admintoken.php'; // this is for arcadier marketplace
 class ApiSdk
 {
     private $adminToken = '';
@@ -77,9 +76,28 @@ class ApiSdk
     public function getAdminId()
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         return $this->adminToken['UserId'];
+    }
+
+    function getAdminToken()
+    {
+        $marketplace = $_COOKIE["marketplace"];
+        $protocol = $_COOKIE["protocol"];
+        $baseUrl = $protocol . '://' . $marketplace;
+        $client_id = '{client_id}';
+        $client_secret = '{client_secret}';
+        $url = $baseUrl . '/token';
+        $body = 'grant_type=client_credentials&client_id=' . $client_id . '&client_secret=' . $client_secret . '&scope=admin';
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $body);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $result = curl_exec($curl);
+        curl_close($curl);
+        return json_decode($result, true);
     }
 
     function getUserToken($username, $password)
@@ -108,7 +126,7 @@ class ApiSdk
     public function getUserInfo($id, $include)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url = $this->baseUrl . '/api/v2/users/' . $id;
         if ($include != null) {
@@ -122,7 +140,7 @@ class ApiSdk
     public function getAllUsers($keywordsParam)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url = $this->baseUrl . '/api/v2/admins/' .  $this->adminToken['UserId'] . '/users/';
         if ($keywordsParam != null) {
@@ -135,7 +153,7 @@ class ApiSdk
     public function registerUser($data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url      = $this->baseUrl . '/api/v2/accounts/register';
         $userInfo = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
@@ -145,7 +163,7 @@ class ApiSdk
     public function updateUserInfo($id, $data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url      = $this->baseUrl . '/api/v2/users/' . $id;
         $userInfo = $this->callAPI("PUT", $this->adminToken['access_token'], $url, $data);
@@ -155,7 +173,7 @@ class ApiSdk
     public function upgradeUserRole($id, $role)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
 
         $url = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/users/' . $id . '/roles/' . $role;
@@ -166,7 +184,7 @@ class ApiSdk
     public function deleteUser($id)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
 
         $url = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/users/' . $id;
@@ -178,7 +196,7 @@ class ApiSdk
     public function getSubMerchants($merchantId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/sub-merchants';
         $submerchants = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
@@ -188,7 +206,7 @@ class ApiSdk
     public function resetPassword($data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url      = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/password';
         $response = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
@@ -198,7 +216,7 @@ class ApiSdk
     public function updatePassword($data, $userId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url      = $this->baseUrl . '/api/v2/users/' . $userId . '/password';
         $response = $this->callAPI("PUT", $this->adminToken['access_token'], $url, $data);
@@ -211,7 +229,7 @@ class ApiSdk
     public function getUserAddress($id,  $addressID)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
 
         $url = $this->baseUrl . '/api/v2/users/' . $id . '/addresses/' . $addressID;
@@ -222,7 +240,7 @@ class ApiSdk
     public function createUserAddress($id, $data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
 
         $url = $this->baseUrl . '/api/v2/users/' . $id . '/addresses/';
@@ -233,7 +251,7 @@ class ApiSdk
     public function updateUserAddress($id, $addressID, $data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
 
         $url = $this->baseUrl . '/api/v2/users/' . $id . '/addresses/' . $addressID;
@@ -244,7 +262,7 @@ class ApiSdk
     public function deleteUserAddress($id, $addressID)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
 
         $url = $this->baseUrl . '/api/v2/users/' . $id . '/addresses/' . $addressID;
@@ -261,7 +279,7 @@ class ApiSdk
     public function getItemInfo($id)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url      = $this->baseUrl . '/api/v2/items/' . $id;
         $itemInfo = $this->callAPI("GET", null, $url, null);
@@ -309,7 +327,7 @@ class ApiSdk
     public function createItem($data, $merchantId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/items';
         $createdItem = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
@@ -319,7 +337,7 @@ class ApiSdk
     public function editItem($data, $merchantId, $itemId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/items/' . $itemId;
         $editedItem = $this->callAPI("PUT", $this->adminToken['access_token'], $url, $data);
@@ -329,7 +347,7 @@ class ApiSdk
     public function deleteItem($merchantId, $itemId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/items/' . $itemId;
         $deletedItem = $this->callAPI("DELETE", $this->adminToken['access_token'], $url, false);
@@ -339,7 +357,7 @@ class ApiSdk
     public function getItemTags($filterParams)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/tags/';
         if ($filterParams != null) {
@@ -352,7 +370,7 @@ class ApiSdk
     public function tagItem($data, $merchantId, $itemId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/items/' . $itemId . '/tags';
         $result = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
@@ -362,7 +380,7 @@ class ApiSdk
     public function deleteTags($data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/tags';
         $result = $this->callAPI("DELETE", $this->adminToken['access_token'], $url, $data);
@@ -376,7 +394,7 @@ class ApiSdk
     public function getCart($buyerId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/users/' . $buyerId . '/carts';
         $deletedItem = $this->callAPI("GET", $this->adminToken['access_token'], $url, false);
@@ -421,7 +439,7 @@ class ApiSdk
     public function getOrderInfoByOrderId($id, $buyerId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/users/' . $buyerId . '/orders/' . $id;
         $orderInfo = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
@@ -431,7 +449,7 @@ class ApiSdk
     public function updateOrders($data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/orders?autoUpdatePayment=false';
         $orderInfo = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
@@ -441,7 +459,7 @@ class ApiSdk
     public function getOrderHistory($merchantId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/transactions';
         $orderHistory = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
@@ -451,7 +469,7 @@ class ApiSdk
     public function getFilteredOrderHistory($merchantId, $pageSizeParam, $pageNumberParam)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/transactions/?';
         if (isset($pageSizeParam)) {
@@ -471,7 +489,7 @@ class ApiSdk
     public function getOrderInfoByInvoiceId($merchantId, $invoiceId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/transactions/' . $invoiceId;
         $orderInfo = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
@@ -481,7 +499,7 @@ class ApiSdk
     public function editOrder($merchantId, $orderId, $data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/orders/' . $orderId;
         $updatedOrder = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
@@ -497,7 +515,7 @@ class ApiSdk
     public function getTransactionInfo($invoiceNo)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url         = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/transactions/' . $invoiceNo;
         $invoiceInfo = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
@@ -507,7 +525,7 @@ class ApiSdk
     public function updateTransactionInfo($invoiceNo, $data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url         = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/invoices/' . $invoiceNo;
         $invoiceInfo = $this->callAPI("PUT", $this->adminToken['access_token'], $url, $data);
@@ -517,7 +535,7 @@ class ApiSdk
     public function getAllTransactions()
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url         = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/transactions';
         $allTransactions = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
@@ -527,7 +545,7 @@ class ApiSdk
     public function getAllFilteredTransactions($pageSizeParam, $pageNumberParam, $startDateParam, $endDateParam)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
 
         $url         = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/transactions/?';
@@ -608,7 +626,7 @@ class ApiSdk
     public function editBuyerCart($merchantId, $cartId, $data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/carts/' . $cartId;
         $response = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
@@ -628,7 +646,7 @@ class ApiSdk
     public function updateMarketplaceTransaction($invoiceId, $data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/invoices/' . $invoiceId;
         $response = $this->callAPI("PUT", $this->adminToken['access_token'], $url, $data);
@@ -642,7 +660,7 @@ class ApiSdk
     public function getMerchantShippingMethods($merchantId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/shipping-methods';
         $methods = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
@@ -652,7 +670,7 @@ class ApiSdk
     public function getDeliveryRates()
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url = $this->baseUrl . '/api/v2/merchants/' . $this->adminToken['UserId']  . '/shipping-methods';
         $rates = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
@@ -662,7 +680,7 @@ class ApiSdk
     public function createShippingMethod($merchantId, $data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/shipping-methods';
         $method = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
@@ -673,7 +691,7 @@ class ApiSdk
     public function updateShippingMethod($merchantId, $shippingMethodId, $data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/shipping-methods/' . $shippingMethodId;
         $method = $this->callAPI("PUT", $this->adminToken['access_token'], $url, $data);
@@ -683,7 +701,7 @@ class ApiSdk
     public function deleteShippingMethod($merchantId, $shippingMethodId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/shipping-methods/' . $shippingMethodId;
         $method = $this->callAPI("DELETE", $this->adminToken['access_token'], $url, null);
@@ -711,7 +729,7 @@ class ApiSdk
     public function getFilteredCategories($pageSizeParam, $pageNumberParam)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/categories/?';
         if (isset($pageSizeParam)) {
@@ -731,7 +749,7 @@ class ApiSdk
     public function createCategory($data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/categories';
         $createdCategory = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
@@ -741,7 +759,7 @@ class ApiSdk
     public function deleteCategory($categoryId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/categories/' . $categoryId;
         $deletedCategory = $this->callAPI("DELETE", $this->adminToken['access_token'], $url, null);
@@ -751,7 +769,7 @@ class ApiSdk
     public function sortCategories($data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/categories';
         $sortedCategories = $this->callAPI("PUT", $this->adminToken['access_token'], $url, $data);
@@ -761,7 +779,7 @@ class ApiSdk
     public function updateCategory($categoryId, $data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/categories/' . $categoryId;
         $updatedCategory = $this->callAPI("PUT", $this->adminToken['access_token'], $url, $data);
@@ -776,7 +794,7 @@ class ApiSdk
     public function getEventTriggers()
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url           = $this->baseUrl . '/api/v2/event-triggers/';
         $eventTriggers = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
@@ -786,7 +804,7 @@ class ApiSdk
     public function addEventTrigger($uri, $eventIds)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/event-triggers/';
         $data = [
@@ -801,7 +819,7 @@ class ApiSdk
     public function updateEventTrigger($eventTriggerId, $data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/event-triggers/' . $eventTriggerId;
         $eventResult = $this->callAPI("PUT", $this->adminToken['access_token'], $url, $data);
@@ -811,7 +829,7 @@ class ApiSdk
     public function removeEventTrigger($eventId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url         = $this->baseUrl . '/api/v2/event-triggers/' . $eventId;
         $eventResult = $this->callAPI("DELETE", $this->adminToken['access_token'], $url, null);
@@ -826,7 +844,7 @@ class ApiSdk
     public function getMarketplaceInfo()
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url           = $this->baseUrl . '/api/v2/marketplaces/';
         $info = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
@@ -836,7 +854,7 @@ class ApiSdk
     public function updateMarketplaceInfo($data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url           = $this->baseUrl . '/api/v2/marketplaces/';
         $info = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
@@ -846,7 +864,7 @@ class ApiSdk
     public function customiseURL($data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url           = $this->baseUrl . '/api/v2/rewrite-rules/';
         $response = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
@@ -859,7 +877,7 @@ class ApiSdk
     public function sendEmail($to, $html, $subject)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/emails/';
         $data = [
@@ -875,7 +893,7 @@ class ApiSdk
     public function sendEmailAfterGeneratingInvoice($invoiceNo)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/emails/';
         $data = [
@@ -893,7 +911,7 @@ class ApiSdk
     public function createCustomField($data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/custom-field-definitions/';
         $createdCustomField = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
@@ -903,7 +921,7 @@ class ApiSdk
     public function getCustomFields()
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/custom-field-definitions/';
         $customFields = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
@@ -913,7 +931,7 @@ class ApiSdk
     public function deleteCustomField($code)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/custom-field-definitions/' . $code;
         $deletedCustomField = $this->callAPI("DELETE", $this->adminToken['access_token'], $url, null);
@@ -923,7 +941,7 @@ class ApiSdk
     public function updateCustomField($code, $data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/custom-field-definitions/' . $code;
         $updatedCustomField = $this->callAPI("PUT", $this->adminToken['access_token'], $url, $data);
@@ -944,7 +962,7 @@ class ApiSdk
     public function getPaymentGateways()
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/payment-gateways/';
         $paymentGateways = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
@@ -954,7 +972,7 @@ class ApiSdk
     public function showPaymentAcceptanceMethods($merchantId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/payment-acceptance-methods/';
         $paymentAcceptanceMethods = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
@@ -964,7 +982,7 @@ class ApiSdk
     public function createPaymentGateway($data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/payment-gateways/';
         $createdPaymentGateway = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
@@ -974,7 +992,7 @@ class ApiSdk
     public function linkPaymentGateway($merchantId, $data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/payment-acceptance-methods/';
         $response = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
@@ -984,7 +1002,7 @@ class ApiSdk
     public function deletePaymentGateway($gatewayId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/payment-gateways/' . $gatewayId;
         $deletedPaymentGateway = $this->callAPI("DELETE", $this->adminToken['access_token'], $url, null);
@@ -994,7 +1012,7 @@ class ApiSdk
     public function deletePaymentAcceptanceMethod($merchantId, $methodId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/payment-acceptance-methods/' . $methodId;
         $deletedPaymentMethod = $this->callAPI("DELETE", $this->adminToken['access_token'], $url, null);
@@ -1004,7 +1022,7 @@ class ApiSdk
     public function updatePaymentMethod($methodCode, $data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId']  . '/payment-gateways/' . $methodCode;
         $updatedPaymentMethod = $this->callAPI("PUT", $this->adminToken['access_token'], $url, $data);
@@ -1097,7 +1115,7 @@ class ApiSdk
     public function createContentPage($data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/content-pages';
         $createdPageContent = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
@@ -1107,7 +1125,7 @@ class ApiSdk
     public function editContentPage($pageId, $data)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/content-pages/' . $pageId;
         $editedPageContent = $this->callAPI("PUT", $this->adminToken['access_token'], $url, $data);
@@ -1117,7 +1135,7 @@ class ApiSdk
     public function deleteContentPage($pageId)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/content-pages/' . $pageId;
         $deletedPageContent = $this->callAPI("DELETE", $this->adminToken['access_token'], $url, null);
@@ -1149,7 +1167,7 @@ class ApiSdk
     public function disableEdms()
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $data = [
             "Settings" => [
@@ -1171,7 +1189,7 @@ class ApiSdk
     public function enabledEdms()
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $data = [
             "Settings" => [
@@ -1193,7 +1211,7 @@ class ApiSdk
     public function ssoToken($exUserId, $userEmail)
     {
         if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
+            $this->adminToken = $this->getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/sso';
         $data = [

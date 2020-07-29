@@ -10,7 +10,7 @@ PHP 7.0.0+
 ## Installation
 
 ### Composer
-The PHP SDK is hosted on [Packagist](https://packagist.org/packages/arcadier/test-packagist-sdk). First, install composer if you do not have it. Next, to install the SDK, run this command:
+The PHP SDK is hosted on [Packagist](https://packagist.org/packages/arcadier/test-packagist-sdk). Composer is required for installing the SDK. To install it, run this command:
 ```
 composer require arcadier/test-packagist-sdk
 ```
