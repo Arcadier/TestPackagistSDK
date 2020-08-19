@@ -1,5 +1,10 @@
 <?php
-// include '../admin/admintoken.php'; // this is for arcadier marketplace
+// include '../admin/admintoken.php'; // this is for arcadier plugins
+include '../admin/admin_token.php'; // this is for 3rd party integrations
+
+$marketplace = '';
+$protocol = 'https';
+
 class ApiSdk
 {
     private $adminToken = '';
@@ -51,8 +56,8 @@ class ApiSdk
 
     public function getMarketplaceBaseUrl()
     {
-        $marketplace = $_COOKIE["marketplace"];
-        $protocol    = $_COOKIE["protocol"];
+        //$marketplace = $_COOKIE["marketplace"];
+        //$protocol    = $_COOKIE["protocol"];
 
         $baseUrl = $protocol . '://' . $marketplace;
         return $baseUrl;
@@ -81,32 +86,13 @@ class ApiSdk
         return $this->adminToken['UserId'];
     }
 
-    function getAdminToken()
-    {
-        $marketplace = $_COOKIE["marketplace"];
-        $protocol = $_COOKIE["protocol"];
-        $baseUrl = $protocol . '://' . $marketplace;
-        $client_id = '{client_id}';
-        $client_secret = '{client_secret}';
-        $url = $baseUrl . '/token';
-        $body = 'grant_type=client_credentials&client_id=' . $client_id . '&client_secret=' . $client_secret . '&scope=admin';
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $body);
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        $result = curl_exec($curl);
-        curl_close($curl);
-        return json_decode($result, true);
-    }
-
     function getUserToken($username, $password)
     {
-        $marketplace = $_COOKIE["marketplace"];
-        $protocol = $_COOKIE["protocol"];
+        //$marketplace = $_COOKIE["marketplace"];
+        //$protocol = $_COOKIE["protocol"];
         $baseUrl = $protocol . '://' . $marketplace;
-        $client_id = 'oqlbFvWBCDU9ZyMF4lndsZfPTKhHftr4KqA7TJa9';
-        $client_secret = 'C4LFJFDIWg_SOmp6zSycmZc21AlDf45ts1zFEBiussc1KOYO1RZ';
+        $client_id = '';
+        $client_secret = '';
         $url = $baseUrl . '/token';
         $body = 'grant_type=password&client_id=' . $client_id . '&client_secret=' . $client_secret . '&scope=admin'
             . '&username=' . $username . '&password=' . $password;;
