@@ -8,10 +8,10 @@
 * [Getting Started](https://github.com/Arcadier/arcadier-php#-getting-started)
   * [Authentication](https://github.com/Arcadier/arcadier-php#authentication)
   * [Trying it](https://github.com/Arcadier/arcadier-php#trying-it)
-* [API Documentation]()
+* [API Documentation](https://github.com/Arcadier/arcadier-php#-api-documentation)
 * [Example Project]()
-* [Changelog]()
-* [License]()
+* [Changelog](https://github.com/Arcadier/arcadier-php#-api-documentation)
+* [License](https://github.com/Arcadier/arcadier-php#license)
 
 ## Introduction
 
@@ -82,6 +82,13 @@ $data = [
 $response = $sdk->getAllItemsJsonFiltering($data);
 $results = $response['Records']; //The actual array of matching items is in the "Records" field of the JSON response
 ```
+
+## Example Projects
+* **Basic e-commerce search page**
+We have built simple CMS that can be hosted on its own and has its backend connected to Arcadier's APIs using this SDK. Head over [here](https://github.com/Arcadier/sample-PHP-SDK-web-app) to find the code.
+<br>
+* **Request For Quotation (RFQ) Plug-In**
+This Plug-In serves as sample code to demonstrate the steps to create an RFQ experience on Arcadier's marketplaces. Head over [here]() to find the code.
 
 ##  📚 API Documentation
 View our full API collection on Postman here: [API documentation](https://apiv2.arcadier.com/).
