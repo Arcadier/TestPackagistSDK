@@ -85,3 +85,7 @@ $results = $response['Records']; //The actual array of matching items is in the 
 
 ##  📚 API Documentation
 View our full API collection on Postman here: [API documentation](https://apiv2.arcadier.com/).
+
+## Changelog
+
+## License
