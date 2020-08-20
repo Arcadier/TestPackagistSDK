@@ -2,6 +2,19 @@
 
 [![GitHub release](https://img.shields.io/github/v/release/arcadier/testpackagistsdk)](https://img.shields.io/github/v/release/arcadier/testpackagistsdk)
 
+* [Introduction]()
+* [Requirements](https://github.com/Arcadier/arcadier-php#requirements)
+* [How to Install](https://github.com/Arcadier/arcadier-php#installation-via-composer)
+* [Getting Started](https://github.com/Arcadier/arcadier-php#-getting-started)
+  * [Authentication](https://github.com/Arcadier/arcadier-php#authentication)
+  * [Trying it](https://github.com/Arcadier/arcadier-php#trying-it)
+* [API Documentation]()
+* [Example Project]()
+* [Changelog]()
+* [License]()
+
+## Introduction
+
 This PHP SDK is an API wrapper that allows developers to integrate their PHP applications easily with Arcadier's APIs. It does the heavily lifting of building the requests and authentication for every API call.
 
 This lets you focus on **building your front-end** instead of having to worry about if you setup the backend properly with our APIs.
@@ -9,7 +22,8 @@ This lets you focus on **building your front-end** instead of having to worry ab
 All you need to know is how to which parameters in each function. This is documenteted [here]().
 
 ## Requirements
-PHP 7.0.0+
+* PHP 7.0.0+
+* An Arcadier marketplace of [package Scale](https://www.arcadier.com/packages.html) or above (including [Enterprise](https://www.arcadier.com/enterprise/))
 
 ## Installation via Composer
 You can install SDK via composer using the following command line:
@@ -67,7 +81,7 @@ $data = [
 
 $response = $sdk->getAllItemsJsonFiltering($data);
 $results = $response['Records']; //The actual array of matching items is in the "Records" field of the JSON response
-``
+```
 
 ##  📚 API Documentation
 View our full API collection on Postman here: [API documentation](https://apiv2.arcadier.com/).
