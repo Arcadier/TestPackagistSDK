@@ -15,7 +15,7 @@
 
 ## Introduction
 
-This PHP SDK is an API wrapper that allows developers to integrate their PHP applications easily with Arcadier's APIs. It does the heavily lifting of building the requests and authentication for every API call.
+This PHP SDK is an API wrapper that allows developers to integrate their PHP applications easily with Arcadier's APIs. It does the heavily lifting of building the requests and authentication for every API call
 
 This lets you focus on **building your front-end** instead of having to worry about if you setup the backend properly with our APIs.
 
