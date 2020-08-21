@@ -1,6 +1,7 @@
 {
     "name": "arcadier/arcadier-php",
-    "description": "PHP SDK for Arcadier APIs",
+    "description": "Arcadier's PHP SDK",
+    "keywords": ["arcadier","marketplace","sdk","ecommerce"],
     "require": {
         "php": "^7.0.0"
     }
