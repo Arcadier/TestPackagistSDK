@@ -1,6 +1,6 @@
 # Arcadier PHP SDK
 
-[![GitHub release](https://img.shields.io/github/v/release/arcadier/arcadierphp)](https://img.shields.io/github/v/release/arcadier/arcadierphp)
+[![GitHub release](https://img.shields.io/github/v/release/arcadier/arcadier-php)](https://img.shields.io/github/v/release/arcadier/arcadier-php)
 
 * [Introduction]()
 * [Requirements](https://github.com/Arcadier/arcadier-php#requirements)
