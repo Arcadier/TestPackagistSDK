@@ -1,20 +1,12 @@
-### Searching for an item
+Documentation
+===
 
-**POST** **```/api/v2/items```** is mapped to `$sdk->getAllItemsJsonFiltering();`
-```php
-$data = [
-    'keywords' => 'string',
-    'pagesize' => 'string',
-    'Categories' =>[
-        'string'
-    ],
-    'sellerID' => 'string'
-];
+## Table of contents
+* [User Accounts & Passwords]()
+* [Addresses]()
+* [Items]()
 
-$response = $sdk->getAllItemsJsonFiltering($data);
-$results = $response['Records']; //The actual array of matching items is in the "Records" field of the JSON response
-```
----
+
 
 ## User Accounts
 ### Get A User's details
@@ -507,4 +499,48 @@ Arguments:
 * `$data` - Item details (Object)
 
 Documentation and `$data` details can be found [here](https://apiv2.arcadier.com/#8af9bf27-a3fb-4623-b8d0-f53a67697c47).
+
+
+### Delete Item/Listing/Booking
+**DELETE ``/api/v2/merchants/{{merchantID}}/items/{{itemID}}``** is mapped to `deleteItem($merchantId, $itemId)`
+
+Arguments:
+* `$merchantId` - *(Required)* Merchant GUID (string)
+* `$itemId` - *(Required)* Item GUID (string)
+
+### Tag Item/Listing/Booking
+**POST ``/api/v2/merchants/{{merchantID}}/items/{{itemID}}/tags``** is mapped to `tagItem($data, $merchantId, $itemId)`
+
+Arguments:
+* `$merchantId` - *(Required)* Merchant GUID (string)
+* `$itemId` - *(Required)* Item GUID (string)
+* `$data` - Item details (Array of strings)
+
+```php
+$data = [
+    'string',
+    'string'
+];
+```
+
+### Get Item Tags
+**GET ``/api/v2/tags``** is mapped to `getItemTags($pageSize = null, $pageNumber = null)`
+
+Arguments:
+* `$pageSize` - *(Optional)* Number of results per page (integer)
+* `$pageNumber` - *(Optional)* Page number (integer)
+
+More about pagination [here](https://apiv2.arcadier.com/#pagination)
+
+### Delete Tags
+**DELETE ``/api/v2/tags``** is mapped to `deleteTags($data)`
+
+```php
+$data = [
+    'string',
+    'string'
+];
+```
+
+
 

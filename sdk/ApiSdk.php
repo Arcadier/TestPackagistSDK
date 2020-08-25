@@ -341,14 +341,20 @@ class ApiSdk
         return $deletedItem;
     }
 
-    public function getItemTags($filterParams)
+    public function getItemTags($pageSize = null, $pageNumber = null)
     {
         if ($this->adminToken == null) {
             $this->adminToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/tags/';
-        if ($filterParams != null) {
-            $url .=  $filterParams;
+        if ($pageSize != null && $pageNumber != null) {
+            $url .=  '?pageSize='.$pageSize.'&pageNumber='.$pageNumber;
+        }
+        if ($pageSize != null && $pageNumber == null) {
+            $url .=  '?pageSize='.$pageSize;
+        }
+        if ($pageSize == null && $pageNumber != null) {
+            $url .=  '?pageNumber='.$pageNumber;
         }
         $tags = $this->callAPI("GET", $this->adminToken['access_token'], $url, false);
         return $tags;
