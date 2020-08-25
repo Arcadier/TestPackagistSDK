@@ -303,7 +303,7 @@ class ApiSdk
         return $items;
     }
 
-    public function getAllItemsJsonFiltering($data)
+    public function searchItems($data)
     {
         $url       = $this->baseUrl . '/api/v2/items';
         $items = $this->callAPI("POST", null, $url, $data);
