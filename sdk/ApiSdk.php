@@ -1,6 +1,6 @@
 <?php
 // include '../admin/admintoken.php'; // this is for arcadier plugins
-include '../admin/admin_token.php'; // this is for 3rd party integrations
+include 'admin_token.php'; // this is for 3rd party integrations
 
 $marketplace = '';
 $protocol = 'https';
