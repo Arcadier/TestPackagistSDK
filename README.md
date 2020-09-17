@@ -69,7 +69,7 @@ echo $item_list['Records']; //The actual array of items is in the "Records" fiel
 
 Searching for an item
 
-**POST** **```/api/v2/items```** is mapped to `$sdk->getAllItemsJsonFiltering();`
+**POST** **```/api/v2/items```** is mapped to `$sdk->searchItems();`
 ```php
 $data = [
     'keywords' => 'string',
