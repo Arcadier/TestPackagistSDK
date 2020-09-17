@@ -1,6 +1,7 @@
-# Arcadier PHP SDK
+<h1 align="center">Arcadier PHP SDK</h1>
 
-[![GitHub release](https://img.shields.io/github/v/release/arcadier/arcadier-php)](https://img.shields.io/github/v/release/arcadier/arcadier-php)
+<p align="center"> <img style="margin-right: 10px;"src="https://img.shields.io/github/v/release/arcadier/arcadier-php"><img src="https://img.shields.io/packagist/dt/Arcadier/arcadier-php"></p>
+
 
 * [Introduction]()
 * [Requirements](https://github.com/Arcadier/arcadier-php#requirements)
@@ -23,32 +24,32 @@ All you need to know is how to which parameters in each function. This is docume
 
 ## Requirements
 * PHP 7.0.0+
+* PHP Server
 * An Arcadier marketplace of [package Scale](https://www.arcadier.com/packages.html) or above (including [Enterprise](https://www.arcadier.com/enterprise/))
 
 ## Installation via Composer
 You can install SDK via composer using the following command line:
 ```php
-composer require arcadier/test-packagist-sdk
+composer require arcadier/arcadier-php
 ```
 
 ## 💡 Getting Started
-### Authentication
-Once the SDK is installed in your directory, go to `/vendor/arcadier/test-packagist-sdk/sdk/admin_token.php` and `/vendor/arcadier/test-packagist-sdk/sdk/ApiSdk.php` and change the following variables to your marketplace's:
+### Authenticating with you marketplace
+Once the SDK is installed in your directory, navigate to `arcadier-php/src/.env` and edit the `.env` file by following the instructions in it.
 
-* `$client_id`
-* `$client_secret`
-* `$marketplace`
-* `$protocol` is either https or http depending on your server
-* `$marketplace` is your marketplace domain.
-
-`$client_id` and `$client_secret` are found in the Account Settings of you Administrator portal.
+Information you will be required to input:
+* CLIENT_ID = ""
+* CLIENT_SECRET = ""
+* DOMAIN = ""
+* PROTOCOL = ""
 
 ### Trying it
-In every PHP script you intend to call Arcadier's API, make sure to include the following snippet:
+In every PHP script in your root directory, make sure to include `api.php`
 ```php
-include '../vendor/arcadier/test-packagist-sdk/sdk/ApiSdk.php';
+require "vendor\arcadier\arcadier-php\src\api.php";
 $sdk = new ApiSdk();
 ```
+Then you will be able to call Arcadier's APIs on your marketplace.
 
 Get your marketplace's information
 
@@ -79,20 +80,16 @@ $data = [
     'sellerID' => 'string'
 ];
 
-$response = $sdk->getAllItemsJsonFiltering($data);
+$response = $sdk->searchItems($data);
 $results = $response['Records']; //The actual array of matching items is in the "Records" field of the JSON response
 ```
 
 ## Example Projects
 * **Basic e-commerce search page**
-We have built simple CMS that can be hosted on its own and has its backend connected to Arcadier's APIs using this SDK. Head over [here](https://github.com/Arcadier/sample-PHP-SDK-web-app) to find the code.
+We have built simple website that searches and displays the items of an Arcadier marketplace. This website is hosted outside of Arcadier's servers but is connected to the marketplace via the SDK. Head over [here](https://github.com/Arcadier/sample-PHP-SDK-web-app) to find the source code.
 <br>
 * **Request For Quotation (RFQ) Plug-In**
 This Plug-In serves as sample code to demonstrate the steps to create an RFQ experience on Arcadier's marketplaces. Head over [here]() to find the code.
 
 ##  📚 API Documentation
 View our full API collection on Postman here: [API documentation](https://apiv2.arcadier.com/).
-
-## Changelog
-
-## License
