@@ -13,7 +13,6 @@ class ApiSdk
     
     public function __construct()
     {
-        // $auth = new AUTH();
         $this->adminToken = getAdminToken();
         $this->marketplace = getMarketplaceDomain();
         $this->protocol = getProtocol();
@@ -88,40 +87,58 @@ class ApiSdk
     }
 
     //for get all users, merchants and buyers
-    public function getAllUsers($keywordsParam = null)
+    public function getAllUsers($keywordsParam = null, $pageSize = null, $pageNumber = null)
     {
         if ($this->adminToken == null) {
             $this->adminToken = getAdminToken();
         }
-        $url = $this->baseUrl . '/api/v2/admins/' .  $this->adminToken['UserId'] . '/users/';
+        $url = $this->baseUrl . '/api/v2/admins/' .  $this->adminToken['UserId'] . '/users/?keywords=';
+        // if ($keywordsParam != null) {
+        //     $url .=  '?keywords='.$keywordsParam;
+        // }
+        if ($pageSize != null) {
+            $url .=  '&pageSize='.$pageSize;
+        }
         if ($keywordsParam != null) {
-            $url .=  $keywordsParam;
+            $url .=  '&pageNumber='.$pageNumber;
         }
         $usersInfo = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
         return $usersInfo;
     }
 
-    public function getAllMerchants($keywordsParam = null)
+    public function getAllMerchants($keywordsParam = null, $pageSize = null, $pageNumber = null)
     {
         if ($this->adminToken == null) {
             $this->adminToken = getAdminToken();
         }
         $url = $this->baseUrl . '/api/v2/admins/' .  $this->adminToken['UserId'] . '/users/?role=merchant';
         if ($keywordsParam != null) {
-            $url .=  '&keywords'.$keywordsParam;
+            $url .=  '&keywords='.$keywordsParam;
+        }
+        if ($pageSize != null) {
+            $url .=  '&pageSize='.$pageSize;
+        }
+        if ($keywordsParam != null) {
+            $url .=  '&pageNumber='.$pageNumber;
         }
         $usersInfo = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
         return $usersInfo;
     }
 
-    public function getAllBuyers($keywordsParam = null)
+    public function getAllBuyers($keywordsParam = null, $pageSize = null, $pageNumber = null)
     {
         if ($this->adminToken == null) {
             $this->adminToken = getAdminToken();
         }
         $url = $this->baseUrl . '/api/v2/admins/' .  $this->adminToken['UserId'] . '/users/?role=buyer';
         if ($keywordsParam != null) {
-            $url .=  '&keywords'.$keywordsParam;
+            $url .=  '&keywords='.$keywordsParam;
+        }
+        if ($pageSize != null) {
+            $url .=  '&pageSize='.$pageSize;
+        }
+        if ($keywordsParam != null) {
+            $url .=  '&pageNumber='.$pageNumber;
         }
         $usersInfo = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
         return $usersInfo;
@@ -264,31 +281,18 @@ class ApiSdk
         return $itemInfo;
     }
 
-    public function getAllItems($sortParams)
+    public function getAllItems($pageSize = null, $pageNumber = null)
     {
         $url       = $this->baseUrl . '/api/v2/items/';
-        if ($sortParams != null) {
-            $url .=  $sortParams;
+        if ($pageSize != null) {
+            $url .=  '?pageSize='.$pageSize;
         }
-        /* if ( isset($createdAscParam) ) {
-            $url .= $createdAscParam . "&"
-        };
-
-        if ( isset($updatedAscParam) ) {
-            $url .= $updatedAscParam . "&"
-        };
-
-        if ( isset($priceAscParam) ) {
-            $url .= $priceAscParam . "&"
-        };
-
-        if ( isset($keywordsParam) ) {
-            $url .= "keywords=" . $priceAscParam . "&"
-        }; 
-
-        if ( isset($nameParam) ) {
-            $url .= $nameParam . "&"
-        }; */
+        if ($pageNumber != null && $pageSize != null) {
+            $url .=  '&pageNumber='.$pageNumber;
+        }
+        else if($pageNumber != null && $pageSize == null){
+            $url .=  '?pageNumber='.$pageNumber;
+        }
 
         $items = $this->callAPI("GET", null, $url, false);
         return $items;
