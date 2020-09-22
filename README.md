@@ -18,10 +18,6 @@
 
 This PHP SDK is an API wrapper that allows developers to integrate their PHP applications easily with Arcadier's APIs. It does the heavily lifting of building the requests and authentication for every API call
 
-This lets you focus on **building your front-end** instead of having to worry about if you setup the backend properly with our APIs.
-
-All you need to know is how to which parameters in each function. This is documenteted [here]().
-
 ## Requirements
 * PHP 7.0.0+
 * PHP Server
@@ -66,30 +62,6 @@ Listing all items:
 $item_list = $sdk->getAllItems();
 echo $item_list['Records']; //The actual array of items is in the "Records" field of the JSON response
 ```
-
-Searching for an item
-
-**POST** **```/api/v2/items```** is mapped to `$sdk->searchItems();`
-```php
-$data = [
-    'keywords' => 'string',
-    'pagesize' => 'string',
-    'Categories' =>[
-        'string'
-    ],
-    'sellerID' => 'string'
-];
-
-$response = $sdk->searchItems($data);
-$results = $response['Records']; //The actual array of matching items is in the "Records" field of the JSON response
-```
-
-## Example Projects
-* **Basic e-commerce search page**
-We have built simple website that searches and displays the items of an Arcadier marketplace. This website is hosted outside of Arcadier's servers but is connected to the marketplace via the SDK. Head over [here](https://github.com/Arcadier/sample-PHP-SDK-web-app) to find the source code.
-<br>
-* **Request For Quotation (RFQ) Plug-In**
-This Plug-In serves as sample code to demonstrate the steps to create an RFQ experience on Arcadier's marketplaces. Head over [here]() to find the code.
 
 ##  📚 API Documentation
 View our full API collection on Postman here: [API documentation](https://apiv2.arcadier.com/).
