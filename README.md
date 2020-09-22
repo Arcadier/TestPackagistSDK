@@ -4,11 +4,10 @@
 
 
 * [Requirements](https://github.com/Arcadier/arcadier-php#requirements)
-* [Getting Started](https://github.com/Arcadier/arcadier-php#-getting-started)
-* [Documentation for the SDK](https://github.com/Arcadier/arcadier-php#-api-documentation)
-* [Documentation for Arcadier's APIs]()
-* [Changelog](https://github.com/Arcadier/arcadier-php#-api-documentation)
-* [License](https://github.com/Arcadier/arcadier-php#license)
+* [Getting Started](https://github.com/Arcadier/arcadier-php#getting-started)
+* [Documentation for the SDK](https://github.com/Arcadier/arcadier-php#documentation-for-the-sdk)
+* [Documentation for Arcadier's APIs](https://github.com/Arcadier/arcadier-php#documentation-for-apis)
+* [Changelog](https://github.com/Arcadier/arcadier-php#changelog)
 
 This PHP SDK is an API wrapper that allows developers to integrate their PHP applications easily with Arcadier's APIs. It does the heavily lifting of building the requests and authentication for every API call
 
