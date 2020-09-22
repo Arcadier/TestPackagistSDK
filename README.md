@@ -62,10 +62,10 @@ echo $item_list['Records']; //The actual array of items is in the "Records" fiel
 ```
 
 ## Documentation for the SDK
-The full documentation for the SDK can be found [here](https://arcadier.github.io).
+The full documentation for the SDK can be found <a href="https://arcadier.github.io" target="_blank">here</a>.
 
 ## Documentation for APIs
-View our full API collection on Postman here: [API documentation](https://apiv2.arcadier.com/).
+View our full API collection on Postman here: <a href="https://apiv2.arcadier.com" target="_blank">API Documentation</a>.
 
 ## Changelog
-Our changelog can be accessed [here](https://changelog.arcadier.com/).
+Our changelog can be accessed <a href="https://changelog.arcadier.com" target="_blank">here</a>.
