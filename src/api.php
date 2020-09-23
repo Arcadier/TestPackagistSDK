@@ -495,7 +495,7 @@ class ApiSdk
         return $invoiceInfo;
     }
 
-    public function updateTransactionInfo($invoiceNo, $data)
+    public function updateTransaction($invoiceNo, $data)
     {
         if ($this->adminToken == null) {
             $this->adminToken = getAdminToken();
@@ -505,52 +505,48 @@ class ApiSdk
         return $invoiceInfo;
     }
 
-    public function getAllTransactions()
+    public function getAllTransactions($startDate = null, $endDate = null, $pageSize = null, $pageNumber = null)
     {
         if ($this->adminToken == null) {
             $this->adminToken = getAdminToken();
         }
         $url         = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/transactions';
+
+        //pagination
+        if ($pageSize != null) {
+            $url .=  '?pageSize='.$pageSize;
+        }
+        if ($pageNumber != null && $pageSize != null) {
+            $url .=  '&pageNumber='.$pageNumber;
+        }
+        else if($pageNumber != null && $pageSize == null){
+            $url .=  '?pageNumber='.$pageNumber;
+        }
+
+        //time filtering
+        if ($startDate != null && $endDate != null) {
+            if($pageSize == null && $pageNumber == null){
+                $url .=  '?startDate='.$startDate.'&endDate='.$endDate;
+            }
+            else{
+                $url .=  '&startDate='.$startDate.'&endDate='.$endDate;
+            }
+        }
+        if(($startDate != null && $endDate == null) || ($startDate == null && $endDate != null)){
+            return "Error: One of \$startDate or \$endDate was not specified.";
+        }
+        
         $allTransactions = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
         return $allTransactions;
     }
 
-    public function getAllFilteredTransactions($pageSizeParam, $pageNumberParam, $startDateParam, $endDateParam)
+    public function getBuyerTransactions($buyerId)
     {
         if ($this->adminToken == null) {
             $this->adminToken = getAdminToken();
         }
-
-        $url         = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/transactions/?';
-        if (isset($pageSizeParam)) {
-            $url .= "pageSize=" . $pageSizeParam . "&";
-        }
-
-        if (isset($pageNumberParam)) {
-            $url .= "pageNumber=" . $pageNumberParam . "&";
-        }
-
-        if (isset($startDateParam)) {
-            $url .= "startDate=" . $startDateParam . "&";
-        }
-
-        if (isset($endDateParam)) {
-            $url .= "endDate=" . $endDateParam . "&";
-        }
-        if (substr($url, -1) == "&") {
-            $url = substr($url, 0, -1);
-        }
-        $filteredTransactions = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
-        return $filteredTransactions;
-    }
-
-    public function getBuyerTransactions($buyerId, $username, $password)
-    {
-        if ($this->userToken == null) {
-            $this->userToken = $this->getUserToken($username, $password);
-        }
         $url         = $this->baseUrl . '/api/v2/users/' . $buyerId . '/transactions';
-        $buyerTransactions = $this->callAPI("GET", $this->userToken['access_token'], $url, null);
+        $buyerTransactions = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
         return $buyerTransactions;
     }
 
@@ -696,26 +692,6 @@ class ApiSdk
     {
         $url       = $this->baseUrl . '/api/v2/categories/hierarchy';
         $categories = $this->callAPI("GET", null, $url, null);
-        return $categories;
-    }
-
-    public function getFilteredCategories($pageSizeParam, $pageNumberParam)
-    {
-        if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
-        }
-        $url       = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/categories/?';
-        if (isset($pageSizeParam)) {
-            $url .= "pageSize=" . $pageSizeParam . "&";
-        }
-
-        if (isset($pageNumberParam)) {
-            $url .= "pageNumber=" . $pageNumberParam . "&";
-        }
-        if (substr($url, -1) == "&") {
-            $url = substr($url, 0, -1);
-        }
-        $categories = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
         return $categories;
     }
 
