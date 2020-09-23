@@ -72,7 +72,6 @@ class ApiSdk
 
     ///////////////////////////////////////////////////// BEGIN USER APIs /////////////////////////////////////////////////////
 
-    // Url in documentation doesnt have this option
     public function getUserInfo($id, $include = null)
     {
         if ($this->adminToken == null) {
@@ -86,7 +85,6 @@ class ApiSdk
         return $userInfo;
     }
 
-    //for get all users, merchants and buyers
     public function getAllUsers($keywordsParam = null, $pageSize = null, $pageNumber = null)
     {
         if ($this->adminToken == null) {
@@ -265,7 +263,6 @@ class ApiSdk
         return $deletedAddress;
     }
 
-
     ///////////////////////////////////////////////////// END ADDRESS APIs /////////////////////////////////////////////////////
 
 
@@ -305,7 +302,6 @@ class ApiSdk
         return $items;
     }
 
-    // For Creating an item and creating a listing
     public function createItem($data, $merchantId)
     {
         if ($this->adminToken == null) {
@@ -389,34 +385,34 @@ class ApiSdk
         return $deletedItem;
     }
 
-    public function addToCart($data, $buyerId, $username, $password)
+    public function addToCart($data, $buyerId)
     {
-        if ($this->userToken == null) {
-            $this->userToken = $this->getUserToken($username, $password);
+        if ($this->adminToken == null) {
+            $this->adimnToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/users/' . $buyerId . '/carts';
-        $cartItem = $this->callAPI("POST", $this->userToken['access_token'], $url, $data);
+        $cartItem = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
         return $cartItem;
     }
 
-    public function updateCartItem($data, $buyerId, $cartItemId, $username, $password)
+    public function updateCartItem($data, $buyerId, $cartItemId)
     {
-        if ($this->userToken == null) {
-            $this->userToken = $this->getUserToken($username, $password);
+        if ($this->adminToken == null) {
+            $this->adimnToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/users/' . $buyerId . '/carts/' . $cartItemId;
-        $cartItem = $this->callAPI("PUT", $this->userToken['access_token'], $url, $data);
+        $cartItem = $this->callAPI("PUT", $this->adminToken['access_token'], $url, $data);
 
         return $cartItem;
     }
 
-    public function deleteCartItem($buyerId, $cartItemId, $username, $password)
+    public function deleteCartItem($buyerId, $cartItemId)
     {
-        if ($this->userToken == null) {
-            $this->userToken = $this->getUserToken($username, $password);
+        if ($this->adminToken == null) {
+            $this->adimnToken = $this->getAdminToken();
         }
         $url       = $this->baseUrl . '/api/v2/users/' . $buyerId . '/carts/' . $cartItemId;
-        $cartItem = $this->callAPI("DELETE", $this->userToken['access_token'], $url, null);
+        $cartItem = $this->callAPI("DELETE", $this->adminToken['access_token'], $url, null);
         return $cartItem;
     }
 
@@ -424,12 +420,12 @@ class ApiSdk
 
     ///////////////////////////////////////////////////// BEGIN ORDER APIs /////////////////////////////////////////////////////
 
-    public function getOrderInfoByOrderId($id, $buyerId)
+    public function getOrder($id, $userId)
     {
         if ($this->adminToken == null) {
             $this->adminToken = getAdminToken();
         }
-        $url       = $this->baseUrl . '/api/v2/users/' . $buyerId . '/orders/' . $id;
+        $url       = $this->baseUrl . '/api/v2/users/' . $userId . '/orders/' . $id;
         $orderInfo = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
         return $orderInfo;
     }
@@ -439,37 +435,26 @@ class ApiSdk
         if ($this->adminToken == null) {
             $this->adminToken = getAdminToken();
         }
-        $url       = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/orders?autoUpdatePayment=false';
+        $url       = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/orders?autoUpdatePayment=false'; // ask about this
         $orderInfo = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
         return $orderInfo;
     }
 
-    public function getOrderHistory($merchantId)
+    public function getOrderHistory($merchantId, $pageSize = null, $pageNumber = null)
     {
         if ($this->adminToken == null) {
             $this->adminToken = getAdminToken();
+        }
+        if ($pageSize != null) {
+            $url .=  '?pageSize='.$pageSize;
+        }
+        if ($pageNumber != null && $pageSize != null) {
+            $url .=  '&pageNumber='.$pageNumber;
+        }
+        else if($pageNumber != null && $pageSize == null){
+            $url .=  '?pageNumber='.$pageNumber;
         }
         $url       = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/transactions';
-        $orderHistory = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
-        return $orderHistory;
-    }
-
-    public function getFilteredOrderHistory($merchantId, $pageSizeParam, $pageNumberParam)
-    {
-        if ($this->adminToken == null) {
-            $this->adminToken = getAdminToken();
-        }
-        $url       = $this->baseUrl . '/api/v2/merchants/' . $merchantId . '/transactions/?';
-        if (isset($pageSizeParam)) {
-            $url .= "pageSize=" . $pageSizeParam . "&";
-        }
-
-        if (isset($pageNumberParam)) {
-            $url .= "pageNumber=" . $pageNumberParam . "&";
-        }
-        if (substr($url, -1) == "&") {
-            $url = substr($url, 0, -1);
-        }
         $orderHistory = $this->callAPI("GET", $this->adminToken['access_token'], $url, null);
         return $orderHistory;
     }
