@@ -611,6 +611,7 @@ class ApiSdk
 
     ///////////////////////////////////////////////////// BEGIN CHECKOUT APIs /////////////////////////////////////////////////////
 
+    //not documented
     public function editBuyerCart($merchantId, $cartId, $data)
     {
         if ($this->adminToken == null) {
@@ -621,23 +622,13 @@ class ApiSdk
         return $response;
     }
 
-    public function generateInvoice($buyerId, $data, $username, $password)
-    {
-        if ($this->userToken == null) {
-            $this->userToken = $this->getUserToken($username, $password);
-        }
-        $url       = $this->baseUrl . '/api/v2/users/' . $buyerId . '/invoices/carts/';
-        $response = $this->callAPI("POST", $this->userToken['access_token'], $url, $data);
-        return $response;
-    }
-
-    public function updateMarketplaceTransaction($invoiceId, $data)
+    public function generateInvoice($buyerId, $data)
     {
         if ($this->adminToken == null) {
             $this->adminToken = getAdminToken();
         }
-        $url       = $this->baseUrl . '/api/v2/admins/' . $this->adminToken['UserId'] . '/invoices/' . $invoiceId;
-        $response = $this->callAPI("PUT", $this->adminToken['access_token'], $url, $data);
+        $url       = $this->baseUrl . '/api/v2/users/' . $buyerId . '/invoices/carts/';
+        $response = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
         return $response;
     }
 
@@ -645,7 +636,7 @@ class ApiSdk
 
     ///////////////////////////////////////////////////// BEGIN SHIPPING APIs /////////////////////////////////////////////////////
 
-    public function getMerchantShippingMethods($merchantId)
+    public function getShippingMethods($merchantId)
     {
         if ($this->adminToken == null) {
             $this->adminToken = getAdminToken();
@@ -700,9 +691,18 @@ class ApiSdk
 
     ///////////////////////////////////////////////////// BEGIN CATEGORY APIs /////////////////////////////////////////////////////
 
-    public function getCategories()
+    public function getCategories($pageSize = null, $pageNumber = null)
     {
         $url       = $this->baseUrl . '/api/v2/categories';
+        if ($pageSize != null) {
+            $url .=  '?pageSize='.$pageSize;
+        }
+        if ($pageNumber != null && $pageSize != null) {
+            $url .=  '&pageNumber='.$pageNumber;
+        }
+        else if($pageNumber != null && $pageSize == null){
+            $url .=  '?pageNumber='.$pageNumber;
+        }
         $categories = $this->callAPI("GET", null, $url, null);
         return $categories;
     }
