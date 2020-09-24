@@ -70,6 +70,25 @@ class ApiSdk
         return $this->adminToken['UserId'];
     }
 
+    public function AdminToken()
+    {
+        if ($this->adminToken == null) {
+            $this->adminToken = getAdminToken();
+        }
+        return $this->adminToken['access_token'];
+    }
+
+    public function LogIn($username, $password)
+    {
+        $user = getUserToken($username, $password);
+        return $user;
+    }
+
+    public function LogOut($token)
+    {
+        $url = $this->baseUrl . '/api/v2/accounts/sign-out';
+        $result = $this->callAPI("POST", $token, $url, null);
+    }
     ///////////////////////////////////////////////////// BEGIN USER APIs /////////////////////////////////////////////////////
 
     public function getUserInfo($id, $include = null)
@@ -750,16 +769,13 @@ class ApiSdk
         return $eventTriggers;
     }
 
-    public function addEventTrigger($uri, $eventIds)
+    public function addEventTrigger($data)
     {
         if ($this->adminToken == null) {
             $this->adminToken = getAdminToken();
         }
         $url  = $this->baseUrl . '/api/v2/event-triggers/';
-        $data = [
-            'Uri'     => $uri,
-            'Filters' => $eventIds,
-        ];
+        
         $eventResult = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
         return $eventResult;
     }
@@ -848,7 +864,7 @@ class ApiSdk
         $url  = $this->baseUrl . '/api/v2/emails/';
         $data = [
             'Type'    => 'invoice',
-            'InvoiceNo'      => $invoiceNo
+            'InvoiceNo' => $invoiceNo
         ];
         $emailResult = $this->callAPI("POST", $this->adminToken['access_token'], $url, $data);
         return $emailResult;
